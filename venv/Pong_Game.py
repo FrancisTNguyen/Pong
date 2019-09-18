@@ -107,7 +107,7 @@ class PCPaddle(object):
 
         self.color = (255,100,100)
 
-        self.speed = 4
+        self.speed = 5
 
     def update(self, pong):
         if pong.rect.top < self.rect.top:
