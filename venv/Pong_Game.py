@@ -1,12 +1,15 @@
 import pygame
-import random
 from pygame.locals import *
+import random
 
 
 
+#Pong class that handles everything about the ball
 
 class Pong(object):
     def __init__(self, screensize):
+
+        #initiate screensize and random trajectory for the ball to spawn randomly
 
         self.screensize = screensize
 
@@ -19,6 +22,7 @@ class Pong(object):
 
         self.ballsize = 5
 
+        #create ball
         self.rect = pygame.Rect(self.centerx-self.radius, self.centery-self.radius, self.radius*2, self.radius*2)
 
         self.color = (100,100,255)
@@ -35,6 +39,7 @@ class Pong(object):
         self.hit_edge_top = False
         self.hit_edge_bottom = False
 
+    #reset function used to reset the whole game when a point is over
     def reset(self, screensize):
         self.centerx = int(screensize[0]*0.5)
         self.centery = int(screensize[1]*random.choice(self.serve_trajectory))
@@ -52,7 +57,7 @@ class Pong(object):
         self.rect.center = (self.centerx, self.centery)
 
 
-
+        #sets values to true if the ball collides with edges
         if self.rect.right >= self.screensize[0] -1:
             self.hit_edge_right = True
         elif self.rect.left <= 0:
@@ -62,6 +67,7 @@ class Pong(object):
         elif self.rect.bottom > self.screensize[1] -2:
             self.hit_edge_bottom = True
 
+        #sends the ball the other direction & play music if the ball collides with paddles
         if self.rect.colliderect(player_paddle.rect):
             pygame.mixer_music.load('pong_hit.wav')
             pygame.mixer_music.play(0)
@@ -93,16 +99,19 @@ class Pong(object):
         pygame.draw.circle(screen, self.color, self.rect.center, self.radius, 0)
         pygame.draw.circle(screen, (0, 0, 0), self.rect.center, self.radius, 1)
 
+
 class PCPaddle(object):
     def __init__(self, screensize):
         self.screensize = screensize
 
+        #placement of paddle
         self.centerx = 5
         self.centery = int(screensize[1]*0.5)
 
         self.height = 100
         self.width = 10
 
+        #create paddle
         self.rect = pygame.Rect(0, self.centery- int(self.height*0.5), self.width, self.height)
 
         self.color = (255,100,100)
@@ -110,6 +119,7 @@ class PCPaddle(object):
         self.speed = 5
 
     def update(self, pong):
+        #where the AI is handled
         if pong.rect.top < self.rect.top:
             self.centery -= self.speed
         elif pong.rect.bottom > self.rect.bottom:
@@ -199,10 +209,12 @@ class PlayerPaddle(object):
         self.direction = 0
 
     def update(self):
+        #only manipulate y position since we are going up and down
         self.centery += self.direction*self.speed
 
         self.rect.center = (self.centerx, self.centery)
 
+        #prohibits paddle to go beyond bounds
         if self.rect.top < self.rect.top:
             self.centerx -= self.speed
         elif self.rect.bottom > self.rect.bottom:
@@ -326,12 +338,16 @@ def main():
 
     running = True
 
+    #loop that handles running the game. If running = false then game ends
+
     while running:
         clock.tick(60)
 
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
+
+            #handles up, down, left, and right for player paddles
 
             if event.type == KEYDOWN:
                 if event.key == K_UP:
@@ -368,6 +384,8 @@ def main():
         player_paddletwo.update()
         player_paddlethree.update()
         pong.update(player_paddle, pc_paddle, pc_paddletwo, pc_paddlethree, player_paddletwo, player_paddlethree)
+
+        #if statements to add score when the ball hits an edge & plays music
 
         if pong.hit_edge_left:
             pygame.mixer_music.load('small_win.mp3')
@@ -422,6 +440,9 @@ def main():
             pong.update(player_paddle, pc_paddle, pc_paddletwo, pc_paddlethree, player_paddletwo, player_paddlethree)
             pong.reset(screensize)
 
+        #Once someone wins 3/5 the game will ask in console to play again or not
+        #this needs to be worked on more since I couldn't figure out how to display the msg in game
+
         if player_games == 3 and pc_games < 3:
             print("You win!")
             pc_games = 0
@@ -456,6 +477,7 @@ def main():
             if answer2 == 'N':
                 running = False
 
+        #fills the screen gray and draw a line down the middle
         screen.fill((100, 100, 100))
         pygame.draw.line(screen, (255, 255, 255), (332, 0), (332, 480), 3)
 
@@ -467,6 +489,8 @@ def main():
         player_paddletwo.render(screen)
         player_paddlethree.render(screen)
         pong.render(screen)
+
+        #display score boards
 
         font = pygame.font.SysFont(None, 50)
         screen_text = font.render("AI", True, (255, 255, 255))
