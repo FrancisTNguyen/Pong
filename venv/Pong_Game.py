@@ -422,7 +422,7 @@ def main():
             pong.update(player_paddle, pc_paddle, pc_paddletwo, pc_paddlethree, player_paddletwo, player_paddlethree)
             pong.reset(screensize)
 
-        if player_games == 1 and pc_games < 3:
+        if player_games == 3 and pc_games < 3:
             print("You win!")
             pc_games = 0
             player_games = 0
@@ -439,7 +439,7 @@ def main():
             if answer == 'N':
                 running = False
 
-        if pc_games == 1 and player_games < 3:
+        if pc_games == 3 and player_games < 3:
             print("You lose!")
             pc_games = 0
             player_games = 0
