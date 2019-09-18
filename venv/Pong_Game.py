@@ -27,8 +27,8 @@ class Pong(object):
 
         self.direction = [random.choice(self.random_direction),random.choice(self.random_direction)]
 
-        self.speedx = 2
-        self.speedy = 4
+        self.speedx = 3
+        self.speedy = 5
 
         self.hit_edge_left = False
         self.hit_edge_right = False
@@ -370,6 +370,8 @@ def main():
         pong.update(player_paddle, pc_paddle, pc_paddletwo, pc_paddlethree, player_paddletwo, player_paddlethree)
 
         if pong.hit_edge_left:
+            pygame.mixer_music.load('small_win.mp3')
+            pygame.mixer_music.play(0)
             player_score += 1
             if player_score == 11:
                 player_games += 1
@@ -377,6 +379,8 @@ def main():
             pong.update(player_paddle, pc_paddle, pc_paddletwo, pc_paddlethree, player_paddletwo, player_paddlethree)
             pong.reset(screensize)
         elif pong.hit_edge_right:
+            pygame.mixer_music.load('small_lose.wav')
+            pygame.mixer_music.play(0)
             pc_score += 1
             if pc_score == 11:
                 pc_games += 1
@@ -384,6 +388,7 @@ def main():
             pong.update(player_paddle, pc_paddle, pc_paddletwo, pc_paddlethree, player_paddletwo, player_paddlethree)
             pong.reset(screensize)
         elif pong.hit_edge_top and pong.centerx < 332:
+            pygame.mixer_music.load('small_win.mp3')
             player_score += 1
             if player_score == 11:
                 player_games += 1
@@ -391,6 +396,8 @@ def main():
             pong.update(player_paddle, pc_paddle, pc_paddletwo, pc_paddlethree, player_paddletwo, player_paddlethree)
             pong.reset(screensize)
         elif pong.hit_edge_top and pong.centerx > 332:
+            pygame.mixer_music.load('small_lose.wav')
+            pygame.mixer_music.play(0)
             pc_score += 1
             if pc_score == 11:
                 pc_games += 1
@@ -398,6 +405,7 @@ def main():
             pong.update(player_paddle, pc_paddle, pc_paddletwo, pc_paddlethree, player_paddletwo, player_paddlethree)
             pong.reset(screensize)
         elif pong.hit_edge_bottom and pong.centerx < 332:
+            pygame.mixer_music.load('small_win.mp3')
             player_score += 1
             if player_score == 11:
                 player_games += 1
@@ -405,6 +413,8 @@ def main():
             pong.update(player_paddle, pc_paddle, pc_paddletwo, pc_paddlethree, player_paddletwo, player_paddlethree)
             pong.reset(screensize)
         elif pong.hit_edge_bottom and pong.centerx > 332:
+            pygame.mixer_music.load('small_lose.wav')
+            pygame.mixer_music.play(0)
             pc_score += 1
             if pc_score == 11:
                 pc_games += 1
@@ -412,12 +422,15 @@ def main():
             pong.update(player_paddle, pc_paddle, pc_paddletwo, pc_paddlethree, player_paddletwo, player_paddlethree)
             pong.reset(screensize)
 
-        if player_games == 3 and pc_games < 3:
+        if player_games == 1 and pc_games < 3:
             print("You win!")
             pc_games = 0
             player_games = 0
             pc_score = 0
             player_score = 0
+
+            pygame.mixer_music.load('big_win.mp3')
+            pygame.mixer_music.play(0)
 
             answer = input("Play Again? Y or N")
             print(answer)
@@ -426,12 +439,15 @@ def main():
             if answer == 'N':
                 running = False
 
-        if pc_games == 3 and player_games < 3:
+        if pc_games == 1 and player_games < 3:
             print("You lose!")
             pc_games = 0
             player_games = 0
             pc_score = 0
             player_score = 0
+
+            pygame.mixer_music.load('big_lose.wav')
+            pygame.mixer_music.play(0)
 
             answer2 = input("Play Again? Y or N")
             print(answer2)
